@@ -1,0 +1,286 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Модели небезопасного поведения</title>
+    <style>
+        :root {
+            --primary-color: #1e293b;
+            --accent-color: #ff6b6b;
+            --text-color: #334155;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --active-tab: #eff6ff;
+            --active-border: #2563eb;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            color: var(--text-color);
+            line-height: 1.4;
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+        }
+
+        /* Жесткие габариты под контейнер урока */
+        .behavior-slider {
+            width: 560px;
+            height: 580px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #ffffff;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Верхняя панель переключения вкладок */
+        .slider-tabs {
+            display: flex;
+            background: var(--bg-light);
+            border-bottom: 1px solid var(--border-color);
+            width: 100%;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 5px;
+            text-align: center;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-color);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .tab-btn.active {
+            background: var(--active-tab);
+            color: var(--active-border);
+            border-bottom-color: var(--active-border);
+        }
+
+        /* Контентная часть */
+        .slider-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        .slide-panel {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+            height: 100%;
+        }
+
+        .slide-panel.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .slide-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0 0 15px 0;
+        }
+
+        /* Контейнер под плоские картинки 560x160 */
+        .slide-image-container {
+            width: 100%;
+            height: 160px;
+            background: #1e1e1e;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .slide-img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+        }
+
+        .quote-box {
+            background: var(--bg-light);
+            border-left: 3px solid #94a3b8;
+            padding: 10px 12px;
+            margin: 0 0 12px 0;
+            font-style: italic;
+            font-size: 13px;
+        }
+
+        .danger-text {
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .toggle-hint-btn {
+            background: #f1f5f9;
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            align-self: flex-start;
+            margin-top: auto;
+        }
+
+        .toggle-hint-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .hint-box {
+            display: none;
+            margin-top: 12px;
+            padding: 12px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #166534;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+<div class="behavior-slider">
+    <div class="slider-tabs">
+        <button class="tab-btn active" onclick="switchSlide(event, 'slide-1')">Привычка</button>
+        <button class="tab-btn" onclick="switchSlide(event, 'slide-2')">Скорость</button>
+        <button class="tab-btn" onclick="switchSlide(event, 'slide-3')">Условия</button>
+        <button class="tab-btn" onclick="switchSlide(event, 'slide-4')">Усталость</button>
+    </div>
+
+    <div class="slider-content">
+        
+        <div id="slide-1" class="slide-panel active">
+            <div class="slide-title">Определяем привычное нарушение в темном цеху</div>
+            <div class="slide-image-container">
+                <img src="habit.png" alt="Привычное нарушение" class="slide-img">
+            </div>
+            <div class="quote-box">
+                «Да я всю жизнь так точу, сорок лет на заводе! Экран этот только обзор загораживает. А очки... так я свои надел, темные, в них и видно все, и в глаза ничего не летит. Че мне сделается, я аккуратно».
+            </div>
+            <div class="danger-text">
+                <strong>В чем скрытая опасность:</strong> У сотрудника сформировался ложный барьер безопасности. Он считает бытовые очки достаточной защитой, а правила ОТ и штатные защитные СИЗ — избыточной бюрократией.
+            </div>
+            <button class="toggle-hint-btn" onclick="toggleHint('hint-1')">Развернуть разбор кейса</button>
+            <div id="hint-1" class="hint-box">
+                <strong>⚡ На заметку СОТу:</strong> Рабочий подменяет штатные СИЗ бытовыми очками, потому что из-за стажа не верит в реальный риск. В чек-лист пишем корневой мотив: <em>«Ложное чувство безопасности / подмена СИЗ бытовыми предметами»</em>. Наказывать бесполезно — нужно разбирать конкретные риски.
+            </div>
+        </div>
+
+        <div id="slide-2" class="slide-panel">
+            <div class="slide-title">Определяем ускоряющее поведение в темном складе</div>
+            <div class="slide-image-container">
+                <img src="speed.png" alt="Нарушение ради скорости" class="slide-img">
+            </div>
+            <div class="quote-box">
+                «Нам до конца смены надо еще три вагона отгрузить, мастер сказал — пока не закончим, домой никто не пойдет. Если я сейчас буду ждать исправные стропы со склада, мы до утра тут просидим!»
+            </div>
+            <div class="danger-text">
+                <strong>В чем скрытая опасность:</strong> Прямое давление производственного плана. Страх сорвать сроки смены или получить выговор от мастера сильнее, чем страх получить травму.
+            </div>
+            <button class="toggle-hint-btn" onclick="toggleHint('hint-2')">Развернуть разбор кейса</button>
+            <div id="hint-2" class="hint-box">
+                <strong>⚡ На заметку СОТу:</strong> В чек-лист пишем причину: <em>«Спешка из-за производственного плана»</em>. Это сигнал руководителю службы для корректировки KPI мастеров участков.
+            </div>
+        </div>
+
+        <div id="slide-3" class="slide-panel">
+            <div class="slide-title">Определяем вынужденное отклонение от правил</div>
+            <div class="slide-image-container">
+                <img src="conditions.png" alt="Сломанная гнилая лестница" class="slide-img">
+            </div>
+            <div class="quote-box">
+                «Я бы рад ограждение поставить, но нам подмости выдали со сломанными креплениями. Снабжение новые третью неделю везет. По-другому туда не залезть».
+            </div>
+            <div class="danger-text">
+                <strong>В чем скрытая опасность:</strong> Системный сбой организации труда. Работник становится нарушителем поневоле, так как предприятие не обеспечило его исправным оборудованием.
+            </div>
+            <button class="toggle-hint-btn" onclick="toggleHint('hint-3')">Развернуть разбор кейса</button>
+            <div id="hint-3" class="hint-box">
+                <strong>⚡ На заметку СОТу:</strong> В чек-лист пишем: <em>«Сбой в цепочке снабжения»</em>. Штрафовать сотрудника здесь — грубейшая ошибка. Информация должна уйти шефу для закупки СИЗ.
+            </div>
+        </div>
+
+        <div id="slide-4" class="slide-panel">
+            <div class="slide-title">Определяем перегрузку в ночную смену</div>
+            <div class="slide-image-container">
+                <img src="fatigue.png" alt="Перегрузка в ночную смену" class="slide-img">
+            </div>
+            <div class="quote-box">
+                «Я уже вторую смену подряд работаю, подменяю напарника. Глаза просто слипаются. Звук удара услышал, только когда поддон посыпался...»
+            </div>
+            <div class="danger-text">
+                <strong>В чем скрытая опасность:</strong> Физиологический фактор. Организм блокирует внимание. Работник рискует не из-за халатности, а из-за банального истощения ресурса внимания.
+            </div>
+            <button class="toggle-hint-btn" onclick="toggleHint('hint-4')">Развернуть разбор кейса</button>
+            <div id="hint-4" class="hint-box">
+                <strong>⚡ На заметку СОТу:</strong> В чек-лист пишем: <em>«Переработки / Усталость в ночную смену»</em>. Эти данные помогут аргументированно требовать от производства пересмотра графиков.
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function switchSlide(evt, slideId) {
+        const panels = document.querySelectorAll('.slide-panel');
+        panels.forEach(panel => panel.classList.remove('active'));
+
+        const tabs = document.querySelectorAll('.tab-btn');
+        tabs.forEach(tab => tab.classList.remove('active'));
+
+        const hints = document.querySelectorAll('.hint-box');
+        hints.forEach(hint => hint.style.display = 'none');
+        
+        const hintBtns = document.querySelectorAll('.toggle-hint-btn');
+        hintBtns.forEach(btn => btn.innerText = 'Развернуть разбор кейса');
+
+        document.getElementById(slideId).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+
+    function toggleHint(hintId) {
+        const hint = document.getElementById(hintId);
+        const btn = hint.previousElementSibling;
+        
+        if (hint.style.display === 'block') {
+            hint.style.display = 'none';
+            btn.innerText = 'Развернуть разбор кейса';
+        } else {
+            hint.style.display = 'block';
+            btn.innerText = 'Свернуть разбор кейса';
+        }
+    }
+</script>
+
+</body>
+</html>
